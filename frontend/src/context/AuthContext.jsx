@@ -47,8 +47,21 @@ export const AuthProvider = ({ children }) => {
     navigate('/login');
   };
 
+  const signup = async (fullName, email, password) => {
+    // 1. Create the user
+    await api.post('/users', {
+      full_name: fullName,
+      email: email,
+      password: password,
+      role: 'HR_ADMIN' // Default role as per backend
+    });
+    
+    // 2. Log them in automatically
+    await login(email, password);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );
